@@ -15,6 +15,14 @@ export default function App() {
 
   if (!fontsLoaded) return <Loading />;
 
+  const EXPO_PUBLIC_ANDROID_CLIENT_ID =
+    process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID;
+
+  console.log(
+    'EXPO_PUBLIC_ANDROID_CLIENT_ID => ',
+    EXPO_PUBLIC_ANDROID_CLIENT_ID,
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <StatusBar
