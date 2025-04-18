@@ -24,7 +24,9 @@ export default function App() {
       id={process.env.EXPO_PUBLIC_REALM_APP_ID || 'default-realm-app-id'}
     >
       <ThemeProvider theme={theme}>
-        <SafeAreaProvider>
+        <SafeAreaProvider
+          style={{ flex: 1, backgroundColor: theme.COLORS.GRAY_800 }}
+        >
           <StatusBar
             barStyle="light-content"
             backgroundColor="transparent"
