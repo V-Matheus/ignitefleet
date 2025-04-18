@@ -4,7 +4,15 @@ import LicensePlateInput from 'src/components/LicensePlateInput';
 import { TextAreaInput } from 'src/components/TextAreaInput';
 import { Button } from 'src/components/Button';
 import { useRef } from 'react';
-import { TextInput } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TextInput,
+} from 'react-native';
+
+const KeyboardAvoidingViewBehavior =
+  Platform.OS === 'android' ? 'height' : 'position';
 
 export function Departure() {
   const descriptionRef = useRef<TextInput>(null);
@@ -17,25 +25,32 @@ export function Departure() {
     <Container>
       <Header title="Saída" />
 
-      <Content>
-        <LicensePlateInput
-          label="Placa do veículo"
-          placeholder="BRA1234"
-          onSubmitEditing={() => descriptionRef.current?.focus()}
-          returnKeyType="next"
-        />
-        <TextAreaInput
-          ref={descriptionRef}
-          label="Finalidade"
-          placeholder="Vou utilizar o veículo para..."
-          onSubmitEditing={() => {
-            descriptionRef.current?.blur();
-            handleDepartureRegister();
-          }}
-          returnKeyLabel="send"
-        />
-        <Button title="Registrar Saída" onPress={handleDepartureRegister} />
-      </Content>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={KeyboardAvoidingViewBehavior}
+      >
+        <ScrollView>
+          <Content>
+            <LicensePlateInput
+              label="Placa do veículo"
+              placeholder="BRA1234"
+              onSubmitEditing={() => descriptionRef.current?.focus()}
+              returnKeyType="next"
+            />
+            <TextAreaInput
+              ref={descriptionRef}
+              label="Finalidade"
+              placeholder="Vou utilizar o veículo para..."
+              onSubmitEditing={() => {
+                descriptionRef.current?.blur();
+                handleDepartureRegister();
+              }}
+              returnKeyLabel="send"
+            />
+            <Button title="Registrar Saída" onPress={handleDepartureRegister} />
+          </Content>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </Container>
   );
 }
