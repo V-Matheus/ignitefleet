@@ -2,18 +2,20 @@ import { TouchableOpacity } from 'react-native';
 import { Container, Greeting, Message, Name, Picture } from './styles';
 import { Power } from 'phosphor-react-native';
 import theme from 'src/theme';
-import { Image } from 'expo-image';
+import { useUser } from '@realm/react';
 
 export function HomeHeader() {
+  const user = useUser();
+
   return (
     <Container>
       <Picture
-        source={{ uri: 'https://github.com/V-Matheus.png' }}
+        source={{ uri: user.profile.pictureUrl }}
         placeholder="L184i9kCblof00ayjZay~qj[ayj@"
       />
       <Greeting>
         <Message>Olá</Message>
-        <Name>Matheus</Name>
+        <Name>{user.profile.name}</Name>
       </Greeting>
 
       <TouchableOpacity>
