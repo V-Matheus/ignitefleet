@@ -1,5 +1,6 @@
 import React from 'react';
 import { SignIn } from './src/screens/SignIn';
+import { Home } from './src/screens/Home';
 import { ThemeProvider } from 'styled-components/native';
 import theme from './src/theme';
 import {
@@ -9,28 +10,25 @@ import {
 } from '@expo-google-fonts/roboto';
 import Loading from './src/components/Loading';
 import { StatusBar } from 'react-native';
+import { AppProvider, UserProvider } from '@realm/react';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
 
   if (!fontsLoaded) return <Loading />;
 
-  const EXPO_PUBLIC_ANDROID_CLIENT_ID =
-    process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID;
-
-  console.log(
-    'EXPO_PUBLIC_ANDROID_CLIENT_ID => ',
-    EXPO_PUBLIC_ANDROID_CLIENT_ID,
-  );
-
   return (
-    <ThemeProvider theme={theme}>
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="transparent"
-        translucent
-      />
-      <SignIn />
-    </ThemeProvider>
+    <AppProvider id={process.env.EXPO_PUBLIC_REALM_APP_ID || 'default-realm-app-id'}>
+      <ThemeProvider theme={theme}>
+        <StatusBar
+          barStyle="light-content"
+          backgroundColor="transparent"
+          translucent
+        />
+        <UserProvider fallback={SignIn}>
+          <Home />
+        </UserProvider>
+      </ThemeProvider>
+    </AppProvider>
   );
 }
