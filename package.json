@@ -13,15 +13,17 @@
     "@react-native-google-signin/google-signin": "^13.2.0",
     "@realm/react": "^0.11.0",
     "expo": "~52.0.43",
+    "expo-dev-client": "~5.0.20",
     "expo-font": "~13.0.4",
     "expo-status-bar": "~2.0.1",
     "expo-system-ui": "~4.0.9",
+    "phosphor-react-native": "^2.3.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-native": "^0.76.9",
+    "react-native-svg": "15.8.0",
     "realm": "^12.14.2",
-    "styled-components": "^6.1.17",
-    "expo-dev-client": "~5.0.20"
+    "styled-components": "^6.1.17"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
