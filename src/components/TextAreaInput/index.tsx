@@ -8,22 +8,14 @@ type Props = TextInputProps & {
   label: string;
 };
 
-const TextAreaInput = forwardRef<TextInput, Props>(
+export const TextAreaInput = forwardRef<TextInput, Props>(
   ({ label, ...rest }, ref) => {
     return (
       <Container>
         <Label>{label}</Label>
 
-        <Input
-          ref={ref}
-          placeholderTextColor={theme.COLORS.GRAY_400}
-          multiline
-          autoCapitalize="sentences"
-          {...rest}
-        />
+        <Input ref={ref} {...rest} />
       </Container>
     );
   },
 );
-
-export { TextAreaInput };
