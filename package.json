@@ -23,7 +23,8 @@
     "react-native": "^0.76.9",
     "react-native-svg": "15.8.0",
     "realm": "^12.14.2",
-    "styled-components": "^6.1.17"
+    "styled-components": "^6.1.17",
+    "expo-image": "~2.0.7"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
