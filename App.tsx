@@ -1,6 +1,5 @@
 import React from 'react';
 import { SignIn } from './src/screens/SignIn';
-import { Home } from './src/screens/Home';
 import { ThemeProvider } from 'styled-components/native';
 import theme from './src/theme';
 import {
@@ -11,6 +10,7 @@ import {
 import Loading from './src/components/Loading';
 import { StatusBar } from 'react-native';
 import { AppProvider, UserProvider } from '@realm/react';
+import { Routes } from './src/routes';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
@@ -18,7 +18,9 @@ export default function App() {
   if (!fontsLoaded) return <Loading />;
 
   return (
-    <AppProvider id={process.env.EXPO_PUBLIC_REALM_APP_ID || 'default-realm-app-id'}>
+    <AppProvider
+      id={process.env.EXPO_PUBLIC_REALM_APP_ID || 'default-realm-app-id'}
+    >
       <ThemeProvider theme={theme}>
         <StatusBar
           barStyle="light-content"
@@ -26,7 +28,7 @@ export default function App() {
           translucent
         />
         <UserProvider fallback={SignIn}>
-          <Home />
+          <Routes />
         </UserProvider>
       </ThemeProvider>
     </AppProvider>
