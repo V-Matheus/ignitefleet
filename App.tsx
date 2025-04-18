@@ -11,6 +11,7 @@ import Loading from './src/components/Loading';
 import { StatusBar } from 'react-native';
 import { AppProvider, UserProvider } from '@realm/react';
 import { Routes } from './src/routes';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Roboto_400Regular, Roboto_700Bold });
@@ -22,14 +23,16 @@ export default function App() {
       id={process.env.EXPO_PUBLIC_REALM_APP_ID || 'default-realm-app-id'}
     >
       <ThemeProvider theme={theme}>
+        <SafeAreaProvider>
         <StatusBar
           barStyle="light-content"
           backgroundColor="transparent"
           translucent
         />
-        <UserProvider fallback={SignIn}>
-          <Routes />
-        </UserProvider>
+          <UserProvider fallback={SignIn}>
+            <Routes />
+          </UserProvider>
+        </SafeAreaProvider>
       </ThemeProvider>
     </AppProvider>
   );
