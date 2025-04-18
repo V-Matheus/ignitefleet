@@ -1,7 +1,31 @@
 import { Realm } from '@realm/react';
 
+type GenerateProps = {
+  user_id: string;
+  description: string;
+  license_plate: string;
+};
+
 export class Historic extends Realm.Object<Historic> {
-  static generate() {}
+  _id!: string;
+  user_id!: string;
+  license_plate!: string;
+  description!: string;
+  status!: string;
+  created_at!: string;
+  update_at!: string;
+
+  static generate({ description, license_plate, user_id }: GenerateProps) {
+    return {
+      _id: new Realm.BSON.UUID(),
+      description,
+      license_plate,
+      user_id,
+      status: 'departure',
+      created_at: new Date(),
+      update_at: new Date(),
+    };
+  }
 
   static schema = {
     name: 'Historic',
