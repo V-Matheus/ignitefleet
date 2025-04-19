@@ -15,7 +15,10 @@ export function Home() {
   const historic = useQuery(Historic);
 
   function handleRegisterMovement() {
-    navigate('departure');
+    if (vehicleInUse?._id) {
+      return navigate('arrival', { id: vehicleInUse._id.toString() });
+    }
+    return navigate('departure');
   }
 
   function fetchVehicle() {
