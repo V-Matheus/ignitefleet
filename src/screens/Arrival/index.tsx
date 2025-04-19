@@ -9,6 +9,8 @@ import {
 } from './styles';
 import Header from 'src/components/Header';
 import { Button } from 'src/components/Button';
+import ButtonIcon from 'src/components/ButtonIcon';
+import { X } from 'phosphor-react-native';
 
 type RouteParamsProps = {
   id: string;
@@ -33,6 +35,7 @@ export function Arrival() {
         </Description>
 
         <Footer>
+          <ButtonIcon icon={X} />
           <Button title="Registrar Chegada" />
         </Footer>
       </Content>
