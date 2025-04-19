@@ -12,8 +12,8 @@ export class Historic extends Realm.Object<Historic> {
   license_plate!: string;
   description!: string;
   status!: string;
-  created_at!: string;
-  update_at!: string;
+  created_at!: Date;
+  update_at!: Date;
 
   static generate({ description, license_plate, user_id }: GenerateProps) {
     return {
