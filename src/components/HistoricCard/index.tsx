@@ -4,6 +4,7 @@ import { Check, ClockClockwise } from 'phosphor-react-native';
 import theme from 'src/theme';
 
 export type HistoricCardProps = {
+  id: string;
   licensePlate: string;
   created: string;
   isSync: boolean;
@@ -13,7 +14,7 @@ type Props = TouchableOpacityProps & {
   data: HistoricCardProps;
 };
 
-export default function HistoricCard({ data, ...rest }: Props) {
+export function HistoricCard({ data, ...rest }: Props) {
   return (
     <Container {...rest}>
       <Info>
