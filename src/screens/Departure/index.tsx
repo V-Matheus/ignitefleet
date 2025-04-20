@@ -4,21 +4,13 @@ import { LicensePlateInput } from 'src/components/LicensePlateInput';
 import { TextAreaInput } from 'src/components/TextAreaInput';
 import { Button } from 'src/components/Button';
 import { useRef, useState } from 'react';
-import {
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  ScrollView,
-  TextInput,
-} from 'react-native';
+import { Alert, ScrollView, TextInput } from 'react-native';
 import { licensePlateValidate } from 'src/utils/licensePlateValidate';
 import { useRealm } from 'src/libs/realm';
 import { Historic } from 'src/libs/realm/schemas/Historic';
 import { useUser } from '@realm/react';
 import { useNavigation } from '@react-navigation/native';
-
-const KeyboardAvoidingViewBehavior =
-  Platform.OS === 'android' ? 'height' : 'position';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 export function Departure() {
   const [description, setDescription] = useState('');
@@ -66,7 +58,6 @@ export function Departure() {
 
       Alert.alert('Saída', 'Saída registrada com sucesso!');
       goBack();
-      
     } catch (error) {
       console.log(error);
       Alert.alert('Erro', 'Não  foi possível registrar a saída do veículo.');
@@ -78,10 +69,7 @@ export function Departure() {
     <Container>
       <Header title="Saída" />
 
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={KeyboardAvoidingViewBehavior}
-      >
+      <KeyboardAwareScrollView extraHeight={100}>
         <ScrollView>
           <Content>
             <LicensePlateInput
@@ -110,7 +98,7 @@ export function Departure() {
             />
           </Content>
         </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAwareScrollView>
     </Container>
   );
 }
