@@ -1,5 +1,6 @@
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
+  AsyncMessage,
   Container,
   Content,
   Description,
@@ -15,12 +16,16 @@ import { useObject, useRealm } from 'src/libs/realm';
 import { Historic } from 'src/libs/realm/schemas/Historic';
 import { BSON } from 'realm';
 import { Alert } from 'react-native';
+import { useEffect, useState } from 'react';
+import { getLastAsyncTimestamp } from 'src/libs/asyncStorage/syncStorage';
 
 type RouteParamsProps = {
   id: string;
 };
 
 export function Arrival() {
+  const [dataNotSynced, setDataNotSynced] = useState(false);
+
   const route = useRoute();
   const { id } = route.params as RouteParamsProps;
   const { goBack } = useNavigation();
@@ -69,6 +74,12 @@ export function Arrival() {
     }
   }
 
+  useEffect(() => {
+    getLastAsyncTimestamp().then((response) => {
+      setDataNotSynced(historic!.update_at.getTime() > response);
+    });
+  }, []);
+
   return (
     <Container>
       <Header title={title} />
@@ -77,14 +88,20 @@ export function Arrival() {
         <LicensePlate>{historic?.license_plate}</LicensePlate>
         <Label>Finalidade</Label>
         <Description>{historic?.description}</Description>
-
-        {historic?.status === 'departure' && (
-          <Footer>
-            <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
-            <Button title="Registrar Chegada" onPress={handleArrivalRegister} />
-          </Footer>
-        )}
       </Content>
+      {historic?.status === 'departure' && (
+        <Footer>
+          <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
+          <Button title="Registrar Chegada" onPress={handleArrivalRegister} />
+        </Footer>
+      )}
+
+      {dataNotSynced && (
+        <AsyncMessage>
+          Sincronização da{' '}
+          {historic?.status === 'departure' ? ' partida' : 'chegada'} pendente.
+        </AsyncMessage>
+      )}
     </Container>
   );
 }
