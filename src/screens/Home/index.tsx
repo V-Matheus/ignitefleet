@@ -10,7 +10,11 @@ import { HistoricCard, HistoricCardProps } from 'src/components/HistoricCard';
 import dayjs from 'dayjs';
 import { useUser } from '@realm/react';
 import Realm from 'realm';
-import { getLastAsyncTimestamp, saveLastSyncTimestamp } from 'src/libs/asyncStorage/syncStorage';
+import {
+  getLastAsyncTimestamp,
+  saveLastSyncTimestamp,
+} from 'src/libs/asyncStorage/syncStorage';
+import Toast from 'react-native-toast-message';
 
 export function Home() {
   const [vehicleInUse, setVehicleInUse] = useState<Historic | null>(null);
@@ -50,7 +54,7 @@ export function Home() {
         'status = "arrival" SORT(created_at DESC)',
       );
 
-      const lastSync = await getLastAsyncTimestamp()
+      const lastSync = await getLastAsyncTimestamp();
 
       const formattedHistoric = response.map((item) => ({
         id: item._id!.toString(),
@@ -80,9 +84,12 @@ export function Home() {
     if (percentage === 100) {
       await saveLastSyncTimestamp();
       fetchHistoric();
+
+      Toast.show({
+        type: 'info',
+        text1: 'Todos os dados estão sincronizados.',
+      });
     }
-
-
   }
 
   useEffect(() => {
