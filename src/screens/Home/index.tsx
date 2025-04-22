@@ -9,6 +9,7 @@ import { Alert, FlatList } from 'react-native';
 import { HistoricCard, HistoricCardProps } from 'src/components/HistoricCard';
 import dayjs from 'dayjs';
 import { useUser } from '@realm/react';
+import Realm from 'realm';
 
 export function Home() {
   const [vehicleInUse, setVehicleInUse] = useState<Historic | null>(null);
@@ -68,6 +69,11 @@ export function Home() {
     navigate('arrival', { id });
   }
 
+  function progressNotification(transferred: number, transferable: number) {
+    const percentage = (transferred / transferable) * 100;
+    console.log(`percentage => ${percentage}%`);
+  }
+
   useEffect(() => {
     fetchVehicleInUse();
   }, []);
@@ -85,6 +91,20 @@ export function Home() {
   useEffect(() => {
     fetchHistoric();
   }, [historic]);
+
+  useEffect(() => {
+    const syncSession = realm.syncSession;
+
+    if (!syncSession) return;
+
+    syncSession.addProgressNotification(
+      Realm.ProgressDirection.Upload,
+      Realm.ProgressMode.ReportIndefinitely,
+      progressNotification,
+    );
+
+    return () => syncSession.removeProgressNotification(progressNotification);
+  }, []);
 
   useEffect(() => {
     realm.subscriptions.update((mutableSubs, realm) => {
