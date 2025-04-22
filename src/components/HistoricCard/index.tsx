@@ -25,7 +25,7 @@ export function HistoricCard({ data, ...rest }: Props) {
       {data.isSync ? (
         <Check size={24} color={theme.COLORS.BRAND_LIGHT} />
       ) : (
-        <ClockClockwise size={24} color={theme.COLORS.BRAND_LIGHT} />
+        <ClockClockwise size={24} color={theme.COLORS.GRAY_300} />
       )}
     </Container>
   );
