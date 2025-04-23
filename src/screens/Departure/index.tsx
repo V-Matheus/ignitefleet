@@ -19,12 +19,14 @@ import {
 } from 'expo-location';
 import { getAddressLocation } from 'src/utils/getAddressLocation';
 import Loading from 'src/components/Loading';
+import { LocationInfo } from 'src/components/LocationInfo';
 
 export function Departure() {
   const [description, setDescription] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
   const [isLoadingLocation, setIsLoadingLocation] = useState(true);
+  const [currentAddress, setCurrentAddress] = useState<string | null>(null);
 
   const [locationForeGroundPermission, requestLocationForeGroundPermission] =
     useForegroundPermissions();
@@ -94,7 +96,7 @@ export function Departure() {
       (location) => {
         getAddressLocation(location.coords)
           .then((address) => {
-            console.log(address);
+            if (address) setCurrentAddress(address);
           })
           .finally(() => setIsLoadingLocation(false));
       },
@@ -129,6 +131,13 @@ export function Departure() {
       <KeyboardAwareScrollView extraHeight={100}>
         <ScrollView>
           <Content>
+            {currentAddress && (
+              <LocationInfo
+                label="Localização Atual"
+                description={currentAddress}
+              />
+            )}
+
             <LicensePlateInput
               ref={licensePlateRef}
               label="Placa do veículo"
