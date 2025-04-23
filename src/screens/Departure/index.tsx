@@ -1,9 +1,9 @@
 import Header from 'src/components/Header';
-import { Container, Content } from './styles';
+import { Container, Content, Message } from './styles';
 import { LicensePlateInput } from 'src/components/LicensePlateInput';
 import { TextAreaInput } from 'src/components/TextAreaInput';
 import { Button } from 'src/components/Button';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Alert, ScrollView, TextInput } from 'react-native';
 import { licensePlateValidate } from 'src/utils/licensePlateValidate';
 import { useRealm } from 'src/libs/realm';
@@ -11,11 +11,15 @@ import { Historic } from 'src/libs/realm/schemas/Historic';
 import { useUser } from '@realm/react';
 import { useNavigation } from '@react-navigation/native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useForegroundPermissions } from 'expo-location';
 
 export function Departure() {
   const [description, setDescription] = useState('');
   const [licensePlate, setLicensePlate] = useState('');
   const [isRegistering, setIsRegistering] = useState(false);
+
+  const [locationForeGroundPermission, requestLocationForeGroundPermission] =
+    useForegroundPermissions();
 
   const descriptionRef = useRef<TextInput>(null);
   const licensePlateRef = useRef<TextInput>(null);
@@ -63,6 +67,23 @@ export function Departure() {
       Alert.alert('Erro', 'Não  foi possível registrar a saída do veículo.');
       setIsRegistering(false);
     }
+  }
+
+  useEffect(() => {
+    requestLocationForeGroundPermission();
+  }, []);
+
+  if (!locationForeGroundPermission?.granted) {
+    return (
+      <Container>
+        <Header title="Saída" />
+        <Message>
+          Você precisa permitir que o aplicativo tenha acesso a localização para
+          utilizar essa funcionalidade. Por favor, acesse as configurações do
+          seu dispositivo e permita o acesso a localização.
+        </Message>
+      </Container>
+    );
   }
 
   return (
