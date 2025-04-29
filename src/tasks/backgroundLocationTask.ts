@@ -1,5 +1,11 @@
-import { Accuracy, hasStartedLocationUpdatesAsync, startLocationUpdatesAsync, stopLocationUpdatesAsync } from 'expo-location';
+import {
+  Accuracy,
+  hasStartedLocationUpdatesAsync,
+  startLocationUpdatesAsync,
+  stopLocationUpdatesAsync,
+} from 'expo-location';
 import * as TaskManager from 'expo-task-manager';
+import { saveStorageLocation } from 'src/libs/asyncStorage/locationStorage';
 
 export const BACKGROUND_TASK_NAME = 'location-tracking';
 
@@ -9,6 +15,8 @@ TaskManager.defineTask(BACKGROUND_TASK_NAME, async ({ data, error }: any) => {
       throw error;
     }
 
+    if (!data) return;
+
     const { coords, timestamp } = data.locations[0];
 
     const currentLocation = {
@@ -17,18 +25,21 @@ TaskManager.defineTask(BACKGROUND_TASK_NAME, async ({ data, error }: any) => {
       timestamp: timestamp,
     };
 
-    console.log(currentLocation);
+    await saveStorageLocation(currentLocation);
   } catch (error) {
     console.log(error);
+    stopLocationTask()
   }
 });
 
 export async function startLocationTask() {
   try {
-    const hasStarted = await hasStartedLocationUpdatesAsync(BACKGROUND_TASK_NAME);
+    const hasStarted = await hasStartedLocationUpdatesAsync(
+      BACKGROUND_TASK_NAME,
+    );
 
-    if(hasStarted) {
-      await stopLocationTask()
+    if (hasStarted) {
+      await stopLocationTask();
     }
 
     await startLocationUpdatesAsync(BACKGROUND_TASK_NAME, {
@@ -43,9 +54,11 @@ export async function startLocationTask() {
 
 export async function stopLocationTask() {
   try {
-    const hasStarted = await hasStartedLocationUpdatesAsync(BACKGROUND_TASK_NAME);
+    const hasStarted = await hasStartedLocationUpdatesAsync(
+      BACKGROUND_TASK_NAME,
+    );
 
-    if(hasStarted) {
+    if (hasStarted) {
       await stopLocationUpdatesAsync(BACKGROUND_TASK_NAME);
     }
   } catch (error) {
