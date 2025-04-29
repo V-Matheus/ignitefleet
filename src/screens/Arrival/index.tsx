@@ -20,6 +20,8 @@ import { useEffect, useState } from 'react';
 import { getLastAsyncTimestamp } from 'src/libs/asyncStorage/syncStorage';
 import { stopLocationTask } from 'src/tasks/backgroundLocationTask';
 import { getStorageLocation } from 'src/libs/asyncStorage/locationStorage';
+import { LatLng } from 'react-native-maps';
+import { Map } from 'src/components/Map';
 
 type RouteParamsProps = {
   id: string;
@@ -27,6 +29,7 @@ type RouteParamsProps = {
 
 export function Arrival() {
   const [dataNotSynced, setDataNotSynced] = useState(false);
+  const [coodinates, setCoordinates] = useState<LatLng[]>([]);
 
   const route = useRoute();
   const { id } = route.params as RouteParamsProps;
@@ -83,7 +86,8 @@ export function Arrival() {
     const updatedAt = historic!.update_at.getTime();
     setDataNotSynced(updatedAt > lastSync);
 
-   const locationStorage = await getStorageLocation()
+    const locationStorage = await getStorageLocation();
+    setCoordinates(locationStorage);
   }
 
   useEffect(() => {
@@ -93,12 +97,16 @@ export function Arrival() {
   return (
     <Container>
       <Header title={title} />
+
+      {coodinates.length > 0 && <Map coordinates={coodinates} />}
+
       <Content>
         <Label>Placa do veículo</Label>
         <LicensePlate>{historic?.license_plate}</LicensePlate>
         <Label>Finalidade</Label>
         <Description>{historic?.description}</Description>
       </Content>
+
       {historic?.status === 'departure' && (
         <Footer>
           <ButtonIcon icon={X} onPress={handleRemoveVehicleUsage} />
