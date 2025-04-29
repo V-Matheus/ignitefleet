@@ -52,7 +52,7 @@ export function Arrival() {
       realm.delete(historic);
     });
 
-    await stopLocationTask()
+    await stopLocationTask();
 
     goBack();
   }
@@ -66,14 +66,16 @@ export function Arrival() {
         );
       }
 
-      
+      const locations = await getStorageLocation();
+
       realm.write(() => {
         if (historic) {
           historic.status = 'arrival';
           historic.update_at = new Date();
+          historic.coords.push(...locations)
         }
       });
-      
+
       await stopLocationTask();
 
       Alert.alert('Chegada', 'Chegada registrada com sucesso!');
@@ -85,8 +87,8 @@ export function Arrival() {
   }
 
   async function getLocationInfo() {
-    if(!historic) return
-    
+    if (!historic) return;
+
     const lastSync = await getLastAsyncTimestamp();
     const updatedAt = historic!.update_at.getTime();
     setDataNotSynced(updatedAt > lastSync);
