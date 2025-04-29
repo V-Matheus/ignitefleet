@@ -24,6 +24,7 @@ import Loading from 'src/components/Loading';
 import { LocationInfo } from 'src/components/LocationInfo';
 import { Car } from 'phosphor-react-native';
 import { Map } from 'src/components/Map';
+import { startLocationTask } from 'src/tasks/backgroundLocationTask';
 
 export function Departure() {
   const [description, setDescription] = useState('');
@@ -83,6 +84,8 @@ export function Departure() {
           'Permita o acesso a localização em segundo plano para registrar a saída do veículo.',
         );
       }
+
+      await startLocationTask()
 
       realm.write(() => {
         realm.create(
