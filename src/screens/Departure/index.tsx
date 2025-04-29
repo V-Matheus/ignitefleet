@@ -63,6 +63,13 @@ export function Departure() {
         );
       }
 
+      if (!currentCoods?.longitude && !currentCoods?.latitude) {
+        return Alert.alert(
+          'Localização',
+          'Não foi possível obter a localização atual do veículo.',
+        );
+      }
+
       setIsRegistering(true);
 
       realm.write(() => {
