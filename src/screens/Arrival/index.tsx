@@ -19,6 +19,7 @@ import { Alert } from 'react-native';
 import { useEffect, useState } from 'react';
 import { getLastAsyncTimestamp } from 'src/libs/asyncStorage/syncStorage';
 import { stopLocationTask } from 'src/tasks/backgroundLocationTask';
+import { getStorageLocation } from 'src/libs/asyncStorage/locationStorage';
 
 type RouteParamsProps = {
   id: string;
@@ -60,7 +61,7 @@ export function Arrival() {
         );
       }
 
-      await stopLocationTask()
+      await stopLocationTask();
 
       realm.write(() => {
         if (historic) {
@@ -77,11 +78,17 @@ export function Arrival() {
     }
   }
 
+  async function getLocationInfo() {
+    const lastSync = await getLastAsyncTimestamp();
+    const updatedAt = historic!.update_at.getTime();
+    setDataNotSynced(updatedAt > lastSync);
+
+   const locationStorage = await getStorageLocation()
+  }
+
   useEffect(() => {
-    getLastAsyncTimestamp().then((response) => {
-      setDataNotSynced(historic!.update_at.getTime() > response);
-    });
-  }, []);
+    getLocationInfo();
+  }, [historic]);
 
   return (
     <Container>
