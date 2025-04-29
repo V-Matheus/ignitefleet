@@ -85,7 +85,7 @@ export function Departure() {
         );
       }
 
-      await startLocationTask()
+      await startLocationTask();
 
       realm.write(() => {
         realm.create(
@@ -94,6 +94,13 @@ export function Departure() {
             user_id: user!.id,
             license_plate: licensePlate.toUpperCase(),
             description,
+            coords: [
+              {
+                latitude: currentCoods.latitude,
+                longitude: currentCoods.longitude,
+                timestamp: new Date().getTime(),
+              },
+            ],
           }),
         );
       });
