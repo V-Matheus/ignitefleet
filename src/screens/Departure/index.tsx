@@ -15,6 +15,7 @@ import {
   LocationAccuracy,
   LocationObjectCoords,
   LocationSubscription,
+  requestBackgroundPermissionsAsync,
   useForegroundPermissions,
   watchPositionAsync,
 } from 'expo-location';
@@ -45,7 +46,7 @@ export function Departure() {
   const realm = useRealm();
   const user = useUser();
 
-  function handleDepartureRegister() {
+  async function handleDepartureRegister() {
     try {
       if (!licensePlateValidate(licensePlate)) {
         licensePlateRef.current?.focus();
@@ -71,6 +72,17 @@ export function Departure() {
       }
 
       setIsRegistering(true);
+
+      const backgroundPermissions = await requestBackgroundPermissionsAsync();
+
+      if (!backgroundPermissions.granted) {
+        setIsRegistering(false);
+
+        return Alert.alert(
+          'Localização',
+          'Permita o acesso a localização em segundo plano para registrar a saída do veículo.',
+        );
+      }
 
       realm.write(() => {
         realm.create(
