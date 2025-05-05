@@ -83,6 +83,14 @@ export function Departure() {
         return Alert.alert(
           'Localização',
           'Permita o acesso a localização em segundo plano para registrar a saída do veículo.',
+          [
+            {
+              text: 'Abrir Configurações',
+              onPress: () => {
+                openSettings();
+              },
+            },
+          ],
         );
       }
 
