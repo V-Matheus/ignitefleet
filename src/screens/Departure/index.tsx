@@ -1,5 +1,5 @@
 import Header from 'src/components/Header';
-import { Container, Content, Message } from './styles';
+import { Container, Content, Message, MessageContent } from './styles';
 import { LicensePlateInput } from 'src/components/LicensePlateInput';
 import { TextAreaInput } from 'src/components/TextAreaInput';
 import { Button } from 'src/components/Button';
@@ -25,6 +25,7 @@ import { LocationInfo } from 'src/components/LocationInfo';
 import { Car } from 'phosphor-react-native';
 import { Map } from 'src/components/Map';
 import { startLocationTask } from 'src/tasks/backgroundLocationTask';
+import { openSettings } from 'src/utils/openSettings';
 
 export function Departure() {
   const [description, setDescription] = useState('');
@@ -148,11 +149,15 @@ export function Departure() {
     return (
       <Container>
         <Header title="Saída" />
-        <Message>
-          Você precisa permitir que o aplicativo tenha acesso a localização para
-          utilizar essa funcionalidade. Por favor, acesse as configurações do
-          seu dispositivo e permita o acesso a localização.
-        </Message>
+        <MessageContent>
+          <Message>
+            Você precisa permitir que o aplicativo tenha acesso a localização
+            para utilizar essa funcionalidade. Por favor, acesse as
+            configurações do seu dispositivo e permita o acesso a localização.
+          </Message>
+        </MessageContent>
+
+        <Button title="Abrir Configurações" onPress={openSettings} />
       </Container>
     );
   }
